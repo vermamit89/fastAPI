@@ -83,4 +83,12 @@ def create_user(req:schemas.UserCreation,db:Session=Depends(get_db)):
     db.refresh(new_user)
     return new_user
 
+@app.get('/user/{id}', response_model=schemas.Showuser)
+def show_user(id:int,db:Session=Depends(get_db)):
+    user_1=db.query(model.User).filter(model.User.id==id).first()
+    if not user_1:
+        raise HTTPException(status_code=404,detail=f'user with the id {id} not found')
+    
+    return user_1
+
 
